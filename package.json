@@ -1,6 +1,6 @@
 {
   "name": "ng2-checklist",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "description": "A very simple checklist directive to get a set of checkboxes to map to an array of strings",
   "main": "index.js",
   "typings": "./index.d.ts",
@@ -39,7 +39,7 @@
   ],
   "homepage": "https://github.com/amaanm/ng2-checklist#readme",
   "devDependencies": {
-    "@angular/core": "^2.0.0-rc.4",
+    "@angular/core": "2.0.0-rc.4",
     "es6-shim": "0.35.1",
     "jasmine-core": "2.4.1",
     "karma": "0.13.22",
