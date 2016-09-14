@@ -39,7 +39,7 @@
   ],
   "homepage": "https://github.com/amaanm/ng2-checklist#readme",
   "devDependencies": {
-    "@angular/core": "^2.0.0-rc.0",
+    "@angular/core": "^2.0.0-rc.4",
     "es6-shim": "0.35.1",
     "jasmine-core": "2.4.1",
     "karma": "0.13.22",
@@ -58,6 +58,6 @@
     "zone.js": "0.6.12"
   },
   "peerDependencies": {
-    "@angular/core": "2.0.0-rc.1"
+    "@angular/core": "2.0.0-rc.4"
   }
 }
