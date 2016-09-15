@@ -1,7 +1,7 @@
-import { Directive, ElementRef, AfterViewInit, Input, HostListener } from '@angular/core';
+import { Directive, ElementRef, AfterViewInit, OnDestroy, Input, HostListener } from '@angular/core';
 
 let storage: Array<string> = [];
-let $checkallElm: any;
+let controlElm: Array<string> = [];
 
 @Directive(
   {
@@ -12,48 +12,57 @@ let $checkallElm: any;
   }
 )
 
-export class ChecklistDirective implements AfterViewInit {
+export class ChecklistDirective implements AfterViewInit, OnDestroy {
 
   @Input('checklist') checklist: Array<string>;
 
   el: ElementRef;
+  name: string;
 
   @HostListener('change') change() {
-    let $native = this.el.nativeElement;
-    let value = $native.value;
-    if ($native.checked) {
+    let value = this.el.nativeElement.value;
+    if (this.el.nativeElement.checked) {
       if (value === 'all') {
         this.checklist.splice(0);
-        for (let i in storage) {
-          this.checklist.push(storage[i]);
+        for (let i in storage[this.name]) {
+          this.checklist.push(storage[this.name][i]);
         }
       } else {
         this.checklist.push(value);
-        if (storage.length === this.checklist.length) {
-          $checkallElm.checked = true;
+        if (storage[this.name].length === this.checklist.length) {
+          controlElm[this.name].checked = true;
         }
       }
     } else {
       if(value === 'all') {
         this.checklist.splice(0);
       } else {
-        $checkallElm.checked = false;
-        this.checklist.splice(this.checklist.indexOf(this.el.nativeElement.value), 1);
+        controlElm[this.name].checked = false;
+        this.checklist.splice(this.checklist.indexOf(value), 1);
       }
     }
   }
 
   constructor(el: ElementRef) {
     this.el = el;
+    this.name = el.nativeElement.name;
   }
 
   ngAfterViewInit() {
     let value = this.el.nativeElement.value;
-    if (value !== 'all') {
-      storage.push(value);
-    } else {
-      $checkallElm = this.el.nativeElement;
+    if (typeof storage[this.name] === 'undefined') {
+      storage[this.name] = [];
     }
+    if (value !== 'all') {
+      storage[this.name].push(value);
+    } else {
+      controlElm[this.name] = this.el.nativeElement;
+    }
+  }
+
+  ngOnDestroy() {
+    storage = [];
+    controlElm = [];
   }
 
   isChecked() {

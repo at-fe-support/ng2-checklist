@@ -10,25 +10,25 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 };
 var core_1 = require('@angular/core');
 var storage = [];
-var $checkallElm;
+var controlElm = [];
 var ChecklistDirective = (function () {
     function ChecklistDirective(el) {
         this.el = el;
+        this.name = el.nativeElement.name;
     }
     ChecklistDirective.prototype.change = function () {
-        var $native = this.el.nativeElement;
-        var value = $native.value;
-        if ($native.checked) {
+        var value = this.el.nativeElement.value;
+        if (this.el.nativeElement.checked) {
             if (value === 'all') {
                 this.checklist.splice(0);
-                for (var i in storage) {
-                    this.checklist.push(storage[i]);
+                for (var i in storage[this.name]) {
+                    this.checklist.push(storage[this.name][i]);
                 }
             }
             else {
                 this.checklist.push(value);
-                if (storage.length === this.checklist.length) {
-                    $checkallElm.checked = true;
+                if (storage[this.name].length === this.checklist.length) {
+                    controlElm[this.name].checked = true;
                 }
             }
         }
@@ -37,19 +37,26 @@ var ChecklistDirective = (function () {
                 this.checklist.splice(0);
             }
             else {
-                $checkallElm.checked = false;
-                this.checklist.splice(this.checklist.indexOf(this.el.nativeElement.value), 1);
+                controlElm[this.name].checked = false;
+                this.checklist.splice(this.checklist.indexOf(value), 1);
             }
         }
     };
     ChecklistDirective.prototype.ngAfterViewInit = function () {
         var value = this.el.nativeElement.value;
+        if (typeof storage[this.name] === 'undefined') {
+            storage[this.name] = [];
+        }
         if (value !== 'all') {
-            storage.push(value);
+            storage[this.name].push(value);
         }
         else {
-            $checkallElm = this.el.nativeElement;
+            controlElm[this.name] = this.el.nativeElement;
         }
+    };
+    ChecklistDirective.prototype.ngOnDestroy = function () {
+        storage = [];
+        controlElm = [];
     };
     ChecklistDirective.prototype.isChecked = function () {
         var value = this.el.nativeElement.value;
